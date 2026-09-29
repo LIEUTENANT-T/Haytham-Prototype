@@ -19,13 +19,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform m_mainCamera;
     private InputAction m_moveAction;
 
-    private CharacterController m_characterController;
+    [HideInInspector] public CharacterController m_characterController;
     private Vector2 m_moveInput;
     private float m_verticalVelocity;
 
+    public static PlayerController instance;
 
     private void Awake()
-    {
+    { 
+        if (instance == null)
+        {
+            instance = this;
+        }
+
         m_characterController = GetComponent<CharacterController>();
         m_moveAction = InputSystem.actions.FindAction("Move");
         m_jumpInput = InputSystem.actions.FindAction("Jump");

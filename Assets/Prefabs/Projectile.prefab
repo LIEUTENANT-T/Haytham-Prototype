@@ -134,7 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   rb: {fileID: 1305640744809216655}
   m_projectileSpeed: 30
-  m_projectileLifetime: 0
+  m_projectileLifetime: 5
 --- !u!135 &-1586401512092402507
 SphereCollider:
   m_ObjectHideFlags: 0

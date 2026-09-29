@@ -4,7 +4,7 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] Rigidbody rb;
     [SerializeField] float m_projectileSpeed;
-    [SerializeField] float m_projectileLifetime = 200f;
+    [SerializeField] float m_projectileLifetime = 5f;
     private float m_currentLifespan;
 
     private Vector3 direction;
@@ -18,7 +18,13 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_currentLifespan -= m_currentLifespan * Time.deltaTime;
+
+        m_currentLifespan -= Time.deltaTime;
+
+        if (m_currentLifespan < 0)
+        {
+            Destroy(this.gameObject);
+        }
 
         Debug.Log(m_currentLifespan);
     }
@@ -32,9 +38,14 @@ public class Projectile : MonoBehaviour
             Shoot(newVelocity.normalized);
             m_currentLifespan = m_projectileLifetime;
         }
-        else
+        if (collision.gameObject.tag == "Teleport")
         {
+            PlayerController.instance.m_characterController.enabled = false;
+            PlayerController.instance.gameObject.transform.position = this.transform.position;
+            PlayerController.instance.m_characterController.enabled = true;
+
             Destroy(this.gameObject);
+            
         }
     }
 
