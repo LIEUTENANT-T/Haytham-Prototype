@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private bool m_hasJumped;
 
     [Header("References")]
-    [SerializeField] private Transform m_mainCamera;
+    public Transform m_mainCamera;
     private InputAction m_moveAction;
 
     [HideInInspector] public CharacterController m_characterController;
