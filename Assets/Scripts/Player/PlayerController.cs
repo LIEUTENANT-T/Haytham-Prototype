@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_gravity = -10f;
     [SerializeField] private float m_initialFallVelocity = -2f;
     private InputAction m_jumpInput;
-    private bool m_hasJumped;
 
     [Header("References")]
     [SerializeField] private Transform m_mainCamera;
@@ -64,10 +63,6 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovement();
         HandleGravity();
-        if (!m_characterController.isGrounded)
-        {
-            m_hasJumped = false;
-        }
     }
 
     private void StoreMovementInput(InputAction.CallbackContext context)
