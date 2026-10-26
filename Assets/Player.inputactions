@@ -41,6 +41,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PlacementMode",
+                    "type": "Button",
+                    "id": "33752703-6057-4e43-aa39-aabafa858386",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -272,6 +281,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c794ce6d-2d40-4696-b706-4bdae14bdd84",
+                    "path": "<Keyboard>/#(T)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "PlacementMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
