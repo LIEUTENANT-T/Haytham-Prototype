@@ -6,27 +6,48 @@ public class ObjectPlacer : MonoBehaviour
 {
     public bool placementMode = false;
     [SerializeField] InputActionReference m_placementModeInput;
+    [SerializeField] InputActionReference m_placeObjectInput;
 
+    [Header("Placement Parameters")]
     [SerializeField] private GameObject m_placeableObjectPrefab;
     [SerializeField] private GameObject m_previewObjectPrefab;
     [SerializeField] private Camera m_playerCamera;
     [SerializeField] private LayerMask m_placementSurfaceLayerMask;
 
+    [Header("Preview Materials")]
+    [SerializeField] private Material m_previewMaterial;
+    [SerializeField] private Color validColour;
+    [SerializeField] private Color invalidColour;
+
+    [Header("Raycast Parameters")]
     [SerializeField] private float m_placementDistance;
     [SerializeField] private float m_raycastStartVerticalOffset;
     [SerializeField] private float m_raycastDistance;
 
     private GameObject m_previewObject = null;
     private Vector3 m_currentPlacementPosition;
+    private bool m_validPreviewState = false;
+
+    public static ObjectPlacer instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
 
     private void OnEnable()
     {
-        m_placementModeInput.action.started += togglePlacementMode;
+        m_placementModeInput.action.started += TogglePlacementMode;
+        m_placeObjectInput.action.started += PlaceObject;
     }
 
     private void OnDisable()
     {
-        m_placementModeInput.action.canceled -= togglePlacementMode;
+        m_placementModeInput.action.started -= TogglePlacementMode;
+        m_placeObjectInput.action.started -= PlaceObject;
     }
 
     void Update()
@@ -34,6 +55,15 @@ public class ObjectPlacer : MonoBehaviour
         if (placementMode)
         {
             UpdateCurrentPlacementPosition();
+
+            if (CanPlaceObject())
+            {
+                SetValidPreviewState();
+            }
+            else
+            {
+                SetInvalidPreviewState();
+            }
         }
     }
 
@@ -56,11 +86,34 @@ public class ObjectPlacer : MonoBehaviour
         m_previewObject.transform.rotation = rotation;
     }
 
-    private void togglePlacementMode(InputAction.CallbackContext context)
+    private bool CanPlaceObject()
+    {
+        if (m_previewObject == null)
+            return false;
+
+        return m_previewObject.GetComponentInChildren<ValidPlacementChecker>().isValid;
+    }
+
+    private void SetValidPreviewState()
+    {
+        m_previewMaterial.color = validColour;
+        m_validPreviewState = true;
+    }
+
+    private void SetInvalidPreviewState()
+    {
+        m_previewMaterial.color = invalidColour;
+        m_validPreviewState = false;
+    }
+
+    private void TogglePlacementMode(InputAction.CallbackContext context)
     {
         if (placementMode)
         {
             Debug.Log("ExitPlacementMode");
+
+            Destroy(m_previewObject);
+            m_previewObject = null;
             placementMode = false;
         }
         else if (!placementMode)
@@ -71,5 +124,14 @@ public class ObjectPlacer : MonoBehaviour
             m_previewObject = Instantiate(m_previewObjectPrefab, m_currentPlacementPosition, rotation, transform);
             placementMode = true;
         }
+    }
+
+    private void PlaceObject(InputAction.CallbackContext context)
+    {
+        if (!placementMode || !m_validPreviewState)
+            return;
+
+        Quaternion rotation = Quaternion.Euler(-90f, m_playerCamera.transform.eulerAngles.y, 0f);
+        Instantiate(m_placeableObjectPrefab, m_currentPlacementPosition, rotation, transform);
     }
 }

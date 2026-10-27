@@ -462,12 +462,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPlacer
   placementMode: 0
   m_placementModeInput: {fileID: -6417558829072597514, guid: c798fc4ee31714f4e91420d8d60fc2b1, type: 3}
+  m_placeObjectInput: {fileID: 7627858805232066176, guid: c798fc4ee31714f4e91420d8d60fc2b1, type: 3}
   m_placeableObjectPrefab: {fileID: 1558347881246555351, guid: be04a1032dbe08b47a94c5b637aa954a, type: 3}
   m_previewObjectPrefab: {fileID: 4367098043615858171, guid: 50eed89e7bef24d488ae69c0a4c41c5c, type: 3}
   m_playerCamera: {fileID: 330585545}
   m_placementSurfaceLayerMask:
     serializedVersion: 2
     m_Bits: 128
+  m_previewMaterial: {fileID: 2100000, guid: 99cb408d3f5ae4b49852d0a40b332168, type: 2}
+  validColour: {r: 0, g: 0.71418774, b: 1, a: 0.39215687}
+  invalidColour: {r: 1, g: 0, b: 0, a: 0.39215687}
   m_placementDistance: 4
   m_raycastStartVerticalOffset: 100
   m_raycastDistance: 1000
@@ -4554,7 +4558,7 @@ PrefabInstance:
       objectReference: {fileID: 1119537420}
     - target: {fileID: 3540139525018824158, guid: be04a1032dbe08b47a94c5b637aa954a, type: 3}
       propertyPath: m_VersionIndex
-      value: 91
+      value: 94
       objectReference: {fileID: 0}
     - target: {fileID: 3821549951057633832, guid: be04a1032dbe08b47a94c5b637aa954a, type: 3}
       propertyPath: m_Mesh
@@ -4562,12 +4566,16 @@ PrefabInstance:
       objectReference: {fileID: 2064858166}
     - target: {fileID: 3821549951057633832, guid: be04a1032dbe08b47a94c5b637aa954a, type: 3}
       propertyPath: m_VersionIndex
-      value: 42
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 4749268472744749054, guid: be04a1032dbe08b47a94c5b637aa954a, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 2064858166}
+    - target: {fileID: 4749268472744749054, guid: be04a1032dbe08b47a94c5b637aa954a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5268646984860051059, guid: be04a1032dbe08b47a94c5b637aa954a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 15

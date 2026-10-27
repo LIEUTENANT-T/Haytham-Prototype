@@ -39,6 +39,9 @@ public class GunController : MonoBehaviour
 
     private void Shoot(InputAction.CallbackContext context)
     {
+        if (ObjectPlacer.instance.placementMode)
+            return;
+
         Vector3 direction = m_cameraTransform.forward;
         Projectile projectile = Instantiate(m_firedProjectile, m_projectileSpawnPosition.position, Quaternion.identity);
         projectile.Shoot(direction.normalized);
