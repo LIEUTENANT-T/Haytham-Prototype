@@ -25,8 +25,6 @@ public class Projectile : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-
-        Debug.Log(m_currentLifespan);
     }
 
     private void OnCollisionEnter(Collision collision)
