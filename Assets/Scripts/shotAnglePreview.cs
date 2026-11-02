@@ -41,7 +41,7 @@ public class shotAnglePreview : MonoBehaviour
 
                 remainingRange -= Vector3.Distance(m_ray.origin, hit.point);
 
-                m_ray = new Ray(hit.point, Vector3.Reflect(m_ray.direction, hit.normal));
+                m_ray = new Ray(hit.point, hit.normal);
 
             }
             else

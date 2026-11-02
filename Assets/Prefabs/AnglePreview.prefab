@@ -155,5 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8369f919f74aec4f81c75b036433bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::shotAnglePreview
-  m_indicatorObj: {fileID: 0}
-  indicatorPrefab: {fileID: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  range: 0
+  reflectionNumber: 0
