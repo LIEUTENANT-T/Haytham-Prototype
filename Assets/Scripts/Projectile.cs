@@ -34,8 +34,8 @@ public class Projectile : MonoBehaviour
         if (collision.gameObject.tag == "Mirror")
         {
             var firstContact = collision.contacts[0];
-            Vector3 newVelocity = Vector3.Reflect(transform.forward, firstContact.normal);
-            Shoot(newVelocity.normalized);
+            Vector3 newVelocity = firstContact.normal;
+            Shoot(newVelocity);
             m_currentLifespan = m_projectileLifetime;
         }
         if (collision.gameObject.tag == "Teleport")
