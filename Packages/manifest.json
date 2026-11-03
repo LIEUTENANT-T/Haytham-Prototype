@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.abertay.analytics": "file:E:/Downloads/AbertayAnalytics-main/AbertayAnalytics-main",
     "com.unity.ai.navigation": "2.0.13",
     "com.unity.collab-proxy": "2.12.4",
     "com.unity.feature.gameplay-storytelling": "1.0.0",

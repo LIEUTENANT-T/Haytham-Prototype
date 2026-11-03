@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_gravity = -10f;
     [SerializeField] private float m_initialFallVelocity = -2f;
     private InputAction m_jumpInput;
-    private bool m_hasJumped;
 
     [Header("References")]
     public Transform m_mainCamera;
@@ -22,6 +21,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public CharacterController m_characterController;
     private Vector2 m_moveInput;
     private float m_verticalVelocity;
+
+    public Transform m_respawnPoint;
 
     public static PlayerController instance;
 
@@ -64,9 +65,13 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovement();
         HandleGravity();
-        if (!m_characterController.isGrounded)
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Hazard")
         {
-            m_hasJumped = false;
+            Die();
         }
     }
 
@@ -101,5 +106,13 @@ public class PlayerController : MonoBehaviour
         }
 
         m_verticalVelocity += m_gravity * Time.deltaTime;
+    }
+
+    private void Die()
+    {
+        Debug.Log("Dead");
+        m_characterController.enabled = false;
+        transform.position = m_respawnPoint.position;
+        m_characterController.enabled = true;
     }
 }
