@@ -4,6 +4,7 @@ using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class shotAnglePreview : MonoBehaviour
 {
@@ -34,38 +35,42 @@ public class shotAnglePreview : MonoBehaviour
 
         for (int i = 0; i < reflectionNumber; i++)
         {
-            if (Physics.Raycast(m_ray.origin, m_ray.direction, out hit, remainingRange, layerMask))
+            if (Physics.Raycast(m_ray.origin, m_ray.direction, out hit, remainingRange))
             {
-                m_lineRenderer.positionCount += 1;
-                m_lineRenderer.SetPosition(m_lineRenderer.positionCount - 1, hit.point);
+                if (hit.transform.CompareTag("Mirror"))
+                {
+                    m_lineRenderer.positionCount += 1;
+                    m_lineRenderer.SetPosition(m_lineRenderer.positionCount - 1, hit.point);
 
-                remainingRange -= Vector3.Distance(m_ray.origin, hit.point);
+                    remainingRange -= Vector3.Distance(m_ray.origin, hit.point);
 
-                m_ray = new Ray(hit.point, hit.normal);
+                    m_ray = new Ray(hit.point, Vector3.Reflect(m_direction, hit.normal));
+                }
+                else
+                {
+                    m_lineRenderer.positionCount += 1;
+                    m_lineRenderer.SetPosition(m_lineRenderer.positionCount - 1, m_ray.origin + (m_ray.direction * remainingRange));
+                }
+            }
+        }
+        if (Physics.Raycast(transform.position, transform.forward, out hit, remainingRange))
+        {   
+            if (hit.transform.CompareTag("Mirror"))
+            {
 
+                Color visibleColour = new Color(0, 1, 0, 1);
+
+                m_lineRenderer.startColor = visibleColour;
+                m_lineRenderer.endColor = visibleColour;
             }
             else
             {
-                m_lineRenderer.positionCount += 1;
-                m_lineRenderer.SetPosition(m_lineRenderer.positionCount - 1, m_ray.origin + (m_ray.direction * remainingRange));
+                Color hiddenColour = new Color(1, 0, 0, 0);
+
+                m_lineRenderer.startColor = hiddenColour;
+                m_lineRenderer.endColor = hiddenColour;
+
             }
-        }
-
-        if (Physics.Raycast(transform.position, transform.forward, out hit, remainingRange, layerMask))
-        {
-            Color visibleColour = new Color(0, 1, 0, 1);
-
-            m_lineRenderer.startColor = visibleColour;
-            m_lineRenderer.endColor = visibleColour;
-
-        }
-        else
-        {
-            Color hiddenColour = new Color(1, 0, 0, 0);
-
-            m_lineRenderer.startColor = hiddenColour;
-            m_lineRenderer.endColor = hiddenColour;
-
         }
     }
 }

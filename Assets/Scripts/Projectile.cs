@@ -7,6 +7,8 @@ public class Projectile : MonoBehaviour
     [SerializeField] float m_projectileLifetime = 5f;
     private float m_currentLifespan;
 
+    private int m_projectileCharge;
+
     private Vector3 direction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,7 +34,9 @@ public class Projectile : MonoBehaviour
         if (collision.gameObject.tag == "Mirror")
         {
             var firstContact = collision.contacts[0];
-            Vector3 newVelocity = firstContact.normal;
+            m_projectileCharge++;
+            //Vector3 newVelocity = firstContact.normal;
+            Vector3 newVelocity = Vector3.Reflect(direction, firstContact.normal);
             Shoot(newVelocity);
             m_currentLifespan = m_projectileLifetime;
         }
@@ -43,7 +47,19 @@ public class Projectile : MonoBehaviour
             PlayerController.instance.m_characterController.enabled = true;
 
             Destroy(this.gameObject);
-            
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Forcefield")
+        {
+            Forcefield field = other.gameObject.GetComponent<Forcefield>();
+
+            if (m_projectileCharge < field.m_requiredCharge)
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 
