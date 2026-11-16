@@ -1,12 +1,15 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Abertay.Analytics;
+using System.Collections.Generic;
 
 public class ObjectPlacer : MonoBehaviour
 {
     public bool placementMode = false;
     [SerializeField] InputActionReference m_placementModeInput;
     [SerializeField] InputActionReference m_placeObjectInput;
+    [SerializeField] InputActionReference m_clearObjectsInput;
 
     [Header("Placement Parameters")]
     [SerializeField] private GameObject m_placeableObjectPrefab;
@@ -28,6 +31,8 @@ public class ObjectPlacer : MonoBehaviour
     private Vector3 m_currentPlacementPosition;
     private bool m_validPreviewState = false;
 
+    [SerializeField] private List<GameObject> m_placedObjects = new List<GameObject>();
+
     public static ObjectPlacer instance;
 
     private void Awake()
@@ -42,12 +47,15 @@ public class ObjectPlacer : MonoBehaviour
     {
         m_placementModeInput.action.started += TogglePlacementMode;
         m_placeObjectInput.action.started += PlaceObject;
+        m_clearObjectsInput.action.started += ClearObjects;
+        
     }
 
     private void OnDisable()
     {
         m_placementModeInput.action.started -= TogglePlacementMode;
         m_placeObjectInput.action.started -= PlaceObject;
+        m_clearObjectsInput.action.started -= ClearObjects;
     }
 
     void Update()
@@ -132,6 +140,29 @@ public class ObjectPlacer : MonoBehaviour
             return;
 
         Quaternion rotation = Quaternion.Euler(-90f, m_playerCamera.transform.eulerAngles.y, 0f);
-        Instantiate(m_placeableObjectPrefab, m_currentPlacementPosition, rotation, transform);
+        var placedObject = Instantiate(m_placeableObjectPrefab, m_currentPlacementPosition, rotation, transform);
+
+        m_placedObjects.Add(placedObject);
+
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        data.Add("MirrorPosition", placedObject.transform.position);
+
+        AnalyticsManager.SendCustomEvent("Mirror Placed", data);
+    }
+
+    private void ClearObjects(InputAction.CallbackContext context)
+    {
+        if (!placementMode)
+            return;
+
+        foreach (GameObject obj in m_placedObjects)
+        {
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+        }
+
+        m_placedObjects.RemoveAll(obj => obj != null);
     }
 }

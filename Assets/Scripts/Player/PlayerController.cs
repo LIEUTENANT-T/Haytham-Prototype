@@ -1,3 +1,4 @@
+using Abertay.Analytics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -110,9 +111,16 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
+
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        data.Add("PlayerPos", transform.position);
+
+        AnalyticsManager.SendCustomEvent("Player Death", data);
         Debug.Log("Dead");
+
         m_characterController.enabled = false;
         transform.position = m_respawnPoint.position;
         m_characterController.enabled = true;
+
     }
 }

@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] float m_projectileLifetime = 5f;
     private float m_currentLifespan;
 
-    private int m_projectileCharge;
+    [SerializeField] int m_projectileCharge;
 
     private Vector3 direction;
 
@@ -52,6 +52,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.gameObject.tag == "Forcefield")
         {
             Forcefield field = other.gameObject.GetComponent<Forcefield>();
