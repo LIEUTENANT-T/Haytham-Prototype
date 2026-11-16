@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     public Transform m_mainCamera;
     private InputAction m_moveAction;
+
+    [SerializeField] private LayerMask m_tutorialLayerMask;
 
     [HideInInspector] public CharacterController m_characterController;
     private Vector2 m_moveInput;
@@ -66,6 +69,7 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovement();
         HandleGravity();
+        CheckForTutorial();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -122,5 +126,22 @@ public class PlayerController : MonoBehaviour
         transform.position = m_respawnPoint.position;
         m_characterController.enabled = true;
 
+    }
+
+    private void CheckForTutorial()
+    {
+        var ray = new Ray(m_mainCamera.transform.position, m_mainCamera.transform.forward);
+        if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 5, m_tutorialLayerMask))
+        {
+            var tutorial = hit.transform.GetComponent<TutorialPopups>();
+
+            UIManager.Instance.m_popUpText.enabled = true;
+
+            UIManager.Instance.m_popUpText.text = tutorial.m_tutorialText;
+        }
+        else
+        {
+            UIManager.Instance.m_popUpText.enabled = false;
+        }
     }
 }

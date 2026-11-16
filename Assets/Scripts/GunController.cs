@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Abertay.Analytics;
+using System.Collections.Generic;
 
 public class GunController : MonoBehaviour
 {
@@ -8,6 +10,8 @@ public class GunController : MonoBehaviour
 
     [SerializeField] private Transform m_cameraTransform;
     [SerializeField] private InputActionReference m_shootAction;
+
+    private int bulletsFired;
 
 
     private void Awake()
@@ -41,6 +45,14 @@ public class GunController : MonoBehaviour
     {
         if (ObjectPlacer.instance.placementMode)
             return;
+
+        bulletsFired++;
+
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        data.Add("PlayerPos", transform.position);
+        data.Add("BulletCount", bulletsFired);
+
+        AnalyticsManager.SendCustomEvent("Bullet Fired", data);
 
         Vector3 direction = m_cameraTransform.forward;
         Projectile projectile = Instantiate(m_firedProjectile, m_projectileSpawnPosition.position, Quaternion.identity);
